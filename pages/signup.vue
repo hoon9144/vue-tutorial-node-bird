@@ -50,7 +50,6 @@
 
 <script>
 export default{
-    layout:'admin',
     data() {
         return {
 
@@ -76,17 +75,27 @@ export default{
     },
     methods:{
         onSubmitForm(){
+            //this 객체사용
             const vm = this;
+            //폼유효성 검사 this.$refs.form 으로접근
             console.log(this.$refs.form.validate());
             if(this.$refs.form.validate()){
+
                 this.userData = {
                  email:vm.email,
                  nickname:this.nickname,
                  password:vm.password,
                  terms:this.terms
                 }
+                //유저데이터 정보 콘솔에서 확인
                 console.log(JSON.stringify(this.userData))
-                alert('회원가입 성공')
+                this.$store.dispatch('users/signUp' , this.userData)
+                .then(() => {
+                    alert('회원가입 성공')
+                    this.$router.push('/')
+                }).catch((err) => {
+                    alert(`회원가입 실패 ${err}`)
+                });
             }else{
                 alert('양식을 모두 입력해주세요')
             }
